@@ -9,9 +9,9 @@ export function addTodo(todo: ITodo): TodoAction {
   };
 }
 
-export function saveTodo(todo: ITodo): TodoAction {
+export function editTodo(todo: ITodo): TodoAction {
   return {
-    type: TodoActionTypes.SAVE_TODO,
+    type: TodoActionTypes.EDIT_TODO,
     payload: todo,
   };
 }

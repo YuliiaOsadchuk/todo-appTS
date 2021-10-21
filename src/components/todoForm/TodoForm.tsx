@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../redux/actions";
-import { ITodo } from "../interfaces";
-import { Spacer, Button, Input } from "../styles/global";
-
-const Label = styled.label`
-  font-size: 16px;
-  font-weight: 700;
-`;
+import { addTodo } from "../../store/actions";
+import { ITodo } from "../../interfaces";
+import { Spacer, Button, Input } from "../../global.styles.";
+import { Label } from "./TodoForm.styles";
 
 const TodoForm: React.FC = () => {
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState("");
   const dispatch = useDispatch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
