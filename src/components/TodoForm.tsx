@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../redux/actions";
+import { ITodo } from "../interfaces";
 import { Spacer, Button, Input } from "../styles/global";
 
 const Label = styled.label`
@@ -7,15 +10,23 @@ const Label = styled.label`
   font-weight: 700;
 `;
 
-interface Props {
-  onAdd: (title: string) => void;
-}
-
-const TodoForm: React.FC<Props> = ({ onAdd }) => {
+const TodoForm: React.FC = () => {
   const [title, setTitle] = useState<string>("");
+  const dispatch = useDispatch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
+  };
+
+  const handleAddTodo = (title: string) => {
+    const newTodo: ITodo = {
+      title: title,
+      id: Date.now(),
+      completed: false,
+    };
+
+    dispatch(addTodo(newTodo));
+    setTitle("");
   };
 
   return (
@@ -32,8 +43,7 @@ const TodoForm: React.FC<Props> = ({ onAdd }) => {
       <Spacer />
       <Button
         onClick={() => {
-          onAdd(title);
-          setTitle("");
+          handleAddTodo(title);
         }}
       >
         Add

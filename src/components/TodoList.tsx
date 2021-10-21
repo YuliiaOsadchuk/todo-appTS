@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 import { ITodo } from "../interfaces";
 import { Button, Input, Spacer } from "../styles/global";
+import { useTypedSelector } from "../hooks/todoTypedSelector";
+import { deleteTodo, saveTodo, toogleTodo } from "../redux/actions";
 
 const Item = styled.div`
   background-color: #ccc;
@@ -23,47 +26,40 @@ const Title = styled.span<TitleProps>`
   text-decoration: ${(props) => props.completed && "line-through"};
 `;
 
-interface Props {
-  todos: ITodo[];
-  onToogle: (id: number) => void;
-  onRemove: (id: number) => void;
-  onSave: (item: ITodo) => void;
-}
-
-const TodoList: React.FC<Props> = ({ todos, onToogle, onRemove, onSave }) => {
+const TodoList: React.FC = () => {
   const [editableItem, setEditableItem] = useState<ITodo | null>(null);
+  const { todos } = useTypedSelector((state) => state.todos);
+  const dispatch = useDispatch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditableItem({ ...editableItem, title: event.target.value } as ITodo);
   };
 
+  const handleSave = (item: ITodo) => {
+    dispatch(saveTodo(item));
+    setEditableItem(null);
+  };
+
   const renderEditableItem = (item: ITodo) => (
     <Spacer>
       <Input value={item.title} type="text" onChange={handleInputChange} />
-      <Button
-        onClick={() => {
-          onSave(item);
-          setEditableItem(null);
-        }}
-      >
-        save
-      </Button>
+      <Button onClick={() => handleSave(item)}>save</Button>
     </Spacer>
   );
 
   const renderItem = (item: ITodo) => (
-    <Spacer>
-      <Item key={item.id}>
+    <Spacer key={item.id}>
+      <Item>
         <div>
           <input
             type="checkbox"
             checked={item.completed}
-            onChange={() => onToogle(item.id)}
+            onChange={() => dispatch(toogleTodo(item.id))}
           />
           <Title completed={item.completed}>{item.title}</Title>
         </div>
         <Button onClick={() => setEditableItem(item)}>edit</Button>
-        <Button onClick={() => onRemove(item.id)}>delete</Button>
+        <Button onClick={() => dispatch(deleteTodo(item.id))}>delete</Button>
       </Item>
     </Spacer>
   );
