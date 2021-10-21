@@ -12,8 +12,6 @@ export const todosReducer = (
   switch (action.type) {
     case TodoActionTypes.ADD_TODO:
       return { ...state, todos: [...state.todos, action.payload] };
-    // case EDIT_TODO:
-    //   return { ...state.todos };
     case TodoActionTypes.SAVE_TODO:
       return {
         ...state,
