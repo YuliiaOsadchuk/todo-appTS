@@ -9,8 +9,8 @@ interface AddTodoAction {
   type: TodoActionTypes.ADD_TODO;
   payload: ITodo;
 }
-interface SaveTodoAction {
-  type: TodoActionTypes.SAVE_TODO;
+interface EditTodoAction {
+  type: TodoActionTypes.EDIT_TODO;
   payload: ITodo;
 }
 
@@ -26,6 +26,6 @@ interface ToogleTodoAction {
 
 export type TodoAction =
   | AddTodoAction
-  | SaveTodoAction
+  | EditTodoAction
   | DeleteTodoAction
   | ToogleTodoAction;
