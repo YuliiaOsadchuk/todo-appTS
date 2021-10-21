@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ITodo } from "../../interfaces";
 import { Button, Input, Spacer } from "../../global.styles.";
 import { Item, Title } from "./TodoList.styles";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { deleteTodo, editTodo, toogleTodo } from "../../store/actions";
+import { deleteTodo, editTodo, toogleTodo } from "../../store/todoSlice";
+import { selectTodos } from "../../store/store";
 
 const TodoList: React.FC = () => {
   const [editableItem, setEditableItem] = useState<ITodo | null>(null);
-  const { todos } = useTypedSelector((state) => state.todos);
+  const todos = useSelector(selectTodos);
   const dispatch = useDispatch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
