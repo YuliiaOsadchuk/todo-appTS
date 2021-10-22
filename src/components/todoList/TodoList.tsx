@@ -4,7 +4,7 @@ import { ITodo } from "../../interfaces";
 import { Button, Input, Spacer } from "../../global.styles.";
 import { Item, Title } from "./TodoList.styles";
 import { deleteTodo, editTodo, toogleTodo } from "../../store/todoSlice";
-import { selectTodos } from "../../store/store";
+import { selectTodos } from "../../store/selectTodos";
 
 const TodoList: React.FC = () => {
   const [editableItem, setEditableItem] = useState<ITodo | null>(null);

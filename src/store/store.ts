@@ -7,8 +7,6 @@ const store = configureStore({
   },
 });
 
-type RootState = ReturnType<typeof store.getState>;
-
-export const selectTodos = (state: RootState) => state.todos.todos;
+export type RootState = ReturnType<typeof store.getState>;
 
 export default store;
