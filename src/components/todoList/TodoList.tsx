@@ -4,11 +4,11 @@ import { ITodo } from "../../interfaces";
 import { Button, Input, Spacer } from "../../global.styles.";
 import { Item, Title } from "./TodoList.styles";
 import { deleteTodo, editTodo, toogleTodo } from "../../store/todoSlice";
-import { selectTodos } from "../../store/selectTodos";
+import { draftSafeSelector } from "../../store/draftSafeSelector";
 
 const TodoList: React.FC = () => {
   const [editableItem, setEditableItem] = useState<ITodo | null>(null);
-  const todos = useSelector(selectTodos);
+  const todos = useSelector(draftSafeSelector);
   const dispatch = useDispatch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
