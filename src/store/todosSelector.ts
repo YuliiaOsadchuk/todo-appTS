@@ -1,8 +1,7 @@
 import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
-const selectSelf = (state: RootState) => state;
-export const draftSafeSelector = createDraftSafeSelector(
-  selectSelf,
+export const todosSelector = createDraftSafeSelector(
+  (state: RootState) => state,
   (state) => state.todos.todos
 );
