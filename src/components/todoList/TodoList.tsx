@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ITodo } from "../../interfaces";
 import { Button, Input, Spacer } from "../../global.styles.";
 import { Item, Title } from "./TodoList.styles";
-import { deleteTodo, editTodo, toogleTodo } from "../../store/todoSlice";
+import { deleteTodo, editTodo, toogleTodo } from "../../store/todoSlice/todoSlice";
 import { todosSelector } from "../../store/todosSelector";
 
 const TodoList: React.FC = () => {
