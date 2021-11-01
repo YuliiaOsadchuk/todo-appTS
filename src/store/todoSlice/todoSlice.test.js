@@ -5,69 +5,75 @@ import reducer, {
   toogleTodo,
 } from "./todoSlice";
 
-test("should handle a todo being added to an empty list", () => {
-  const previousState = {
-    todos: [],
-  };
+describe("Should handle a todo adding", () => {
+  it("to an empty list", () => {
+    const givenTodos = {
+      todos: [],
+    };
 
-  expect(
-    reducer(
-      previousState,
+    const expected = {
+      todos: [
+        {
+          id: 0,
+          title: "Run the tests",
+          completed: false,
+        },
+      ],
+    };
+
+    const result = reducer(
+      givenTodos,
       addTodo({
         id: 0,
         title: "Run the tests",
         completed: false,
       })
-    )
-  ).toEqual({
-    todos: [
-      {
-        id: 0,
-        title: "Run the tests",
-        completed: false,
-      },
-    ],
+    );
+
+    expect(result).toEqual(expected);
   });
-});
 
-test("should handle a todo being added to an existing list", () => {
-  const previousState = {
-    todos: [
-      {
-        id: 0,
-        title: "Run the tests",
-        completed: false,
-      },
-    ],
-  };
+  it("to an existing list", () => {
+    const givenTodos = {
+      todos: [
+        {
+          id: 0,
+          title: "Run the tests",
+          completed: false,
+        },
+      ],
+    };
 
-  expect(
-    reducer(
-      previousState,
+    const expected = {
+      todos: [
+        {
+          id: 0,
+          title: "Run the tests",
+          completed: false,
+        },
+        {
+          id: 1,
+          title: "Use Redux",
+          completed: false,
+        },
+      ],
+    };
+
+    const result = reducer(
+      givenTodos,
       addTodo({
         id: 1,
         title: "Use Redux",
         completed: false,
       })
-    )
-  ).toEqual({
-    todos: [
-      {
-        id: 0,
-        title: "Run the tests",
-        completed: false,
-      },
-      {
-        id: 1,
-        title: "Use Redux",
-        completed: false,
-      },
-    ],
+    );
+
+    expect(result).toEqual(expected);
   });
 });
 
-test("should handle a todo being delete from an existing list", () => {
-  const previousState = {
+it("should handle a todo being delete from an existing list", () => {
+  const givenTodos = {
     todos: [
       {
         id: 0,
@@ -84,19 +90,7 @@ test("should handle a todo being delete from an existing list", () => {
 
   const idToBeDeleted = 1;
 
-  expect(reducer(previousState, deleteTodo(idToBeDeleted))).toEqual({
-    todos: [
-      {
-        id: 0,
-        title: "Run the tests",
-        completed: false,
-      },
-    ],
-  });
-});
-
-test("should handle a todo being added to an existing list", () => {
-  const previousState = {
+  const expected = {
     todos: [
       {
         id: 0,
@@ -106,28 +100,13 @@ test("should handle a todo being added to an existing list", () => {
     ],
   };
 
-  expect(
-    reducer(
-      previousState,
-      editTodo({
-        id: 0,
-        title: "Use Redux",
-        completed: false,
-      })
-    )
-  ).toEqual({
-    todos: [
-      {
-        id: 0,
-        title: "Use Redux",
-        completed: false,
-      },
-    ],
-  });
+  const result = reducer(givenTodos, deleteTodo(idToBeDeleted));
+
+  expect(result).toEqual(expected);
 });
 
-test("should handle a todo being added to an existing list", () => {
-  const previousState = {
+it("should handle an editing togo in an existing item", () => {
+  const givenTodo = {
     todos: [
       {
         id: 0,
@@ -137,9 +116,40 @@ test("should handle a todo being added to an existing list", () => {
     ],
   };
 
-  const idToToogle = 0;
+  const expected = {
+    todos: [
+      {
+        id: 0,
+        title: "Use Redux",
+        completed: false,
+      },
+    ],
+  };
 
-  expect(reducer(previousState, toogleTodo(idToToogle))).toEqual({
+  const result = reducer(
+    givenTodo,
+    editTodo({
+      id: 0,
+      title: "Use Redux",
+      completed: false,
+    })
+  );
+
+  expect(result).toEqual(expected);
+});
+
+it("should handle toogle todo in an existing item", () => {
+  const givenTodo = {
+    todos: [
+      {
+        id: 0,
+        title: "Run the tests",
+        completed: false,
+      },
+    ],
+  };
+
+  const expected = {
     todos: [
       {
         id: 0,
@@ -147,5 +157,11 @@ test("should handle a todo being added to an existing list", () => {
         completed: true,
       },
     ],
-  });
+  };
+
+  const idToToogle = 0;
+
+  const result = reducer(givenTodo, toogleTodo(idToToogle));
+
+  expect(result).toEqual(expected);
 });
