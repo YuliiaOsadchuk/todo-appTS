@@ -20,6 +20,7 @@ describe("Should handle a todo adding", () => {
         },
       ],
     };
+    ///
 
     const result = reducer(
       givenTodos,
