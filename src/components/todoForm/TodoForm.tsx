@@ -1,26 +1,24 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addTodo } from "../../store/todoSlice/todoSlice";
-import { ITodo } from "../../interfaces";
 import { Spacer, Button, Input } from "../../global.styles.";
 import { Label } from "./TodoForm.styles";
+import { useAddTodoMutation } from "../../store/todosApi";
 
 const TodoForm: React.FC = () => {
   const [title, setTitle] = useState("");
-  const dispatch = useDispatch();
+  const [addTodo] = useAddTodoMutation();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const handleAddTodo = (title: string) => {
-    const newTodo: ITodo = {
-      title: title,
-      id: Date.now(),
-      completed: false,
-    };
-
-    dispatch(addTodo(newTodo));
+  const handleAddTodo = async (title: string) => {
+    if (title) {
+      await addTodo({
+        title: title,
+        id: Date.now(),
+        completed: false,
+      }).unwrap();
+    }
     setTitle("");
   };
 
