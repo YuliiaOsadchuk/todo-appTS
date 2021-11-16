@@ -3,15 +3,15 @@ import { ITodo } from "../interfaces";
 
 export const todosApi = createApi({
   reducerPath: "todosApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/" }),
   tagTypes: ["Todos"],
   endpoints: (build) => ({
     getTodo: build.query<ITodo, number>({
       query: (id) => `todos/${id}`,
       providesTags: (result, error, id) => [{ type: "Todos", id }],
     }),
-    getTodos: build.query<ITodo[], void>({
-      query: () => "todos",
+    getTodos: build.query<ITodo[], number>({
+      query: (page) => `todos?${page && `_page=${page}`}`,
       providesTags: (result) =>
         result
           ? [
@@ -86,6 +86,7 @@ export const todosApi = createApi({
 });
 
 export const {
+  useGetTodoQuery,
   useGetTodosQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,

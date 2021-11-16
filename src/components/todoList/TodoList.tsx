@@ -8,13 +8,21 @@ import {
   useUpdateTodoMutation,
   useToogleTodoMutation,
 } from "../../store/todosApi";
+import Pagination from "../pagination/Pagination";
+
+const DEFAULT_CURRENT_PAGE = 1;
 
 const TodoList: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(DEFAULT_CURRENT_PAGE);
   const [editableItem, setEditableItem] = useState<ITodo | null>(null);
-  const { data: todos } = useGetTodosQuery();
+  const { data: todos } = useGetTodosQuery(currentPage);
   const [deleteTodo] = useDeleteTodoMutation();
   const [editTodo] = useUpdateTodoMutation();
   const [toogleTodo] = useToogleTodoMutation();
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     editableItem &&
@@ -63,14 +71,19 @@ const TodoList: React.FC = () => {
   );
 
   return (
-    <Spacer>
-      {!todos && <p>You don`t have any todo yet</p>}
-      {todos?.map((todo) =>
-        editableItem?.id === todo.id
-          ? renderEditableItem(editableItem)
-          : renderItem(todo)
-      )}
-    </Spacer>
+    <>
+      <Spacer>
+        {!todos && <p>You don`t have any todo yet</p>}
+        {todos?.map((todo) =>
+          editableItem?.id === todo.id
+            ? renderEditableItem(editableItem)
+            : renderItem(todo)
+        )}
+      </Spacer>
+      <Spacer>
+        <Pagination currentPage={currentPage} onPageChange={handlePageChange} />
+      </Spacer>
+    </>
   );
 };
 
