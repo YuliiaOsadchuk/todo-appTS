@@ -1,14 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ITodo } from "../interfaces";
 
+const BASE_URL = "http://localhost:3000/";
+
 export const todosApi = createApi({
   reducerPath: "todosApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   tagTypes: ["Todos"],
   endpoints: (build) => ({
     getTodo: build.query<ITodo, number>({
       query: (id) => `todos/${id}`,
-      providesTags: (result, error, id) => [{ type: "Todos", id }],
+      providesTags: (result, _, id) => [{ type: "Todos", id }],
     }),
     getTodos: build.query<ITodo[], number>({
       query: (page) => `todos?${page && `_page=${page}`}`,
@@ -35,7 +37,7 @@ export const todosApi = createApi({
           method: "DELETE",
         };
       },
-      invalidatesTags: (result, error, id) => [{ type: "Todos", id }],
+      invalidatesTags: (result, _, id) => [{ type: "Todos", id }],
     }),
 
     updateTodo: build.mutation<void, Pick<ITodo, "id"> & Partial<ITodo>>({
@@ -56,7 +58,7 @@ export const todosApi = createApi({
           patchResult.undo();
         }
       },
-      invalidatesTags: (result, error, { id }) => [{ type: "Todos", id }],
+      invalidatesTags: (result, _, { id }) => [{ type: "Todos", id }],
     }),
 
     toogleTodo: build.mutation<
@@ -80,7 +82,7 @@ export const todosApi = createApi({
           patchResult.undo();
         }
       },
-      invalidatesTags: (result, error, { id }) => [{ type: "Todos", id }],
+      invalidatesTags: (result, _, { id }) => [{ type: "Todos", id }],
     }),
   }),
 });
