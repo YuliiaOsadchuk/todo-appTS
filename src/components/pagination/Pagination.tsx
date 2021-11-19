@@ -7,22 +7,28 @@ interface Props {
 }
 
 const Pagination: React.FC<Props> = ({ currentPage, onPageChange }) => {
+  const isDisabledButton = currentPage === 1;
+
+  const handlePageChangeClick = (page: number) => {
+    onPageChange(page);
+  };
+
   return (
     <FlexRow>
       <PageButton
-        disabled={currentPage === 1}
-        onClick={() => onPageChange(1)}
+        disabled={isDisabledButton}
+        onClick={() => handlePageChangeClick(1)}
       >
         First
       </PageButton>
       <PageButton
-        disabled={currentPage === 1}
-        onClick={() => onPageChange(currentPage - 1)}
+        disabled={isDisabledButton}
+        onClick={() => handlePageChangeClick(currentPage - 1)}
       >
         Prev
       </PageButton>
       <PageButton>{currentPage}</PageButton>
-      <PageButton onClick={() => onPageChange(currentPage + 1)}>
+      <PageButton onClick={() => handlePageChangeClick(currentPage + 1)}>
         Next
       </PageButton>
     </FlexRow>
