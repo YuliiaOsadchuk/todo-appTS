@@ -1,36 +1,49 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { ITodo } from "../../interfaces";
 import { Button, Input, Spacer } from "../../global.styles.";
 import { Item, Title } from "./TodoList.styles";
-import { deleteTodo, editTodo, toogleTodo } from "../../store/todoSlice/todoSlice";
-import { todosSelector } from "../../store/todosSelector";
+import {
+  useGetTodosQuery,
+  useDeleteTodoMutation,
+  useUpdateTodoMutation,
+  useToogleTodoMutation,
+} from "../../store/todosApi";
+import Pagination from "../pagination/Pagination";
+
+const DEFAULT_CURRENT_PAGE = 1;
 
 const TodoList: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(DEFAULT_CURRENT_PAGE);
   const [editableItem, setEditableItem] = useState<ITodo | null>(null);
-  const todos = useSelector(todosSelector);
-  const dispatch = useDispatch();
+  const { data: todos } = useGetTodosQuery(currentPage);
+  const [deleteTodo] = useDeleteTodoMutation();
+  const [editTodo] = useUpdateTodoMutation();
+  const [toogleTodo] = useToogleTodoMutation();
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     editableItem &&
       setEditableItem({ ...editableItem, title: event.target.value });
   };
 
-  const handleSave = (item: ITodo) => {
-    dispatch(editTodo(item));
+  const handleSave = async (item: ITodo) => {
+    await editTodo(item).unwrap();
     setEditableItem(null);
   };
 
-  const handleToogle = (id: number) => {
-    dispatch(toogleTodo(id));
+  const handleToogle = async (item: ITodo) => {
+    await toogleTodo(item).unwrap();
   };
 
   const handleEdit = (item: ITodo) => {
     setEditableItem(item);
   };
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteTodo(id));
+  const handleDelete = async (id: number) => {
+    await deleteTodo(id).unwrap();
   };
 
   const renderEditableItem = (item: ITodo) => (
@@ -47,7 +60,7 @@ const TodoList: React.FC = () => {
           <input
             type="checkbox"
             checked={item.completed}
-            onChange={() => handleToogle(item.id)}
+            onChange={() => handleToogle(item)}
           />
           <Title completed={item.completed}>{item.title}</Title>
         </div>
@@ -58,14 +71,19 @@ const TodoList: React.FC = () => {
   );
 
   return (
-    <Spacer>
-      {!todos.length && <p>You don`t have any todo yet</p>}
-      {todos.map((todo) =>
-        editableItem?.id === todo.id
-          ? renderEditableItem(editableItem)
-          : renderItem(todo)
-      )}
-    </Spacer>
+    <>
+      <Spacer>
+        {!todos && <p>You don`t have any todo yet</p>}
+        {todos?.map((todo) =>
+          editableItem?.id === todo.id
+            ? renderEditableItem(editableItem)
+            : renderItem(todo)
+        )}
+      </Spacer>
+      <Spacer>
+        <Pagination currentPage={currentPage} onPageChange={handlePageChange} />
+      </Spacer>
+    </>
   );
 };
 
